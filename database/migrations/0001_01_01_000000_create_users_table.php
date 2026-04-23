@@ -24,6 +24,8 @@ return new class extends Migration
             $table->string('role')->nullable();
             $table->string('google_id')->nullable()->unique();
             $table->boolean('registration_completed')->default(true);
+            $table->string('code', 6)->nullable();
+            $table->timestamp('code_expired_at')->nullable();
             $table->foreignId('engineer_id')->nullable()->constrained('users')->cascadeOnDelete();
             $table->rememberToken();
             $table->timestamps();
