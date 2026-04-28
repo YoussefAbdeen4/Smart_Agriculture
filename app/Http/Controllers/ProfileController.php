@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\ProfileResource;
+use App\Http\Resources\PublicProfileResource;
 use App\Http\Traits\ApiTrait;
 use App\Http\Traits\media;
 use App\Models\Farm;
@@ -29,6 +30,27 @@ class ProfileController extends Controller
             'Profile retrieved successfully'
         );
     }
+
+public function showPublicProfile($id): JsonResponse
+{
+    $user = User::with([
+        'supervisor', 
+        'staff', 
+        'farms', 
+        'blogs.reactions', 
+        'blogs.comments'
+    ])->find($id);
+
+    if (!$user) {
+        return $this->errorResponse('','User not found',404);     
+        
+    }
+
+    return $this->dataResponse(
+        new PublicProfileResource($user), 
+        'User profile retrieved successfully'
+    );
+}
 
     /**
      * Update the authenticated user's profile information.

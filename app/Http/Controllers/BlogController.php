@@ -93,7 +93,7 @@ class BlogController extends Controller
         }, 'reactions' => function ($query) {
             $query->with('user');
         }, 'attachments']);
-
+//dd($blog);
         return $this->dataResponse(
             new AllBlogsResource($blog),
             'Blog retrieved successfully'

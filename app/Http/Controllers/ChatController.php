@@ -6,16 +6,18 @@ use App\Http\Resources\ChatResource;
 use App\Http\Resources\MessageResource;
 use App\Http\Traits\ApiTrait;
 use App\Http\Traits\media;
+use App\Mail\NewMessageMail;
 use App\Models\AttachmentMessage;
 use App\Models\Chat;
 use App\Models\Message;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class ChatController extends Controller
 {
-    use ApiTrait, AuthorizesRequests,media;
+    use ApiTrait, AuthorizesRequests, media;
 
     /**
      * Get or create a chat between the user and another user.
@@ -95,9 +97,22 @@ class ChatController extends Controller
         $this->authorize('sendMessage', $chat);
 
         $validated = $request->validate([
-            'content' => ['required', 'string'],
-            'attachments'   => ['nullable', 'array', 'max:10'],
-            'attachments.*' => ['file', 'mimes:jpg,jpeg,png,pdf,mp4', 'max:10240'],
+            'content' => [
+                'required_without:attachments',
+                'nullable',
+                'string'
+            ],
+            'attachments' => [
+                'required_without:content',
+                'nullable',
+                'array',
+                'max:10'
+            ],
+            'attachments.*' => [
+                'file',
+                'mimes:jpg,jpeg,png,pdf,mp4',
+                'max:10240'
+            ],
         ]);
 
         $message = Message::create([
@@ -106,7 +121,7 @@ class ChatController extends Controller
             'chat_id' => $chat->id,
         ]);
 
-          // Store the attachment
+        // Store the attachment
         if ($request->hasFile('attachments')) {
             foreach ($request->file('attachments') as $file) {
                 // Store the file
@@ -119,7 +134,14 @@ class ChatController extends Controller
         }
 
         $message->load('sender', 'attachments');
+        $chat->load('sender', 'receiver');
+        $data = [
+            'receiver' => $chat->receiver->first_name . ' ' . $chat->receiver->last_name,
+            'sender' => $chat->sender->first_name . ' ' . $chat->sender->last_name,
+            'content' => $message->content,
+        ];
 
+        Mail::to($chat->receiver->email)->send(new NewMessageMail($data));
         return $this->dataResponse(
             new MessageResource($message),
             'Message with attachment sent successfully',

@@ -19,9 +19,10 @@ class BlogResource extends JsonResource
             'title'=> $this->title,
             'content'=> $this->content,
             'user'=>[
-               'first_name'=> $this->user->first_name,
-               'last_name'=> $this->user->last_name,
-               'img'=> url('/img/profile/'.$this->user->img),
+                'id'=>$this->user->id,
+                'first_name'=> $this->user->first_name,
+                'last_name'=> $this->user->last_name,
+                'img'=>$this->user->img? url('/img/profile/'.$this->user->img):null,
             ],
            'attachments' => $this->attachments->map(function ($attachment) {
             return [

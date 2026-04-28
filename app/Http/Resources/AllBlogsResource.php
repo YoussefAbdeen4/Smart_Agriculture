@@ -21,6 +21,7 @@ class AllBlogsResource extends JsonResource
 
             // بيانات صاحب البلوج
             'user' => [
+                'id'=>$this->user->id,
                 'first_name' => $this->user->first_name,
                 'last_name'  => $this->user->last_name,
                 'img'        => $this->user->img ? url('/img/profile/' . $this->user->img) : null,
@@ -39,6 +40,7 @@ class AllBlogsResource extends JsonResource
                     'id'      => $comment->id,
                     'comment' => $comment->content, // تأكد من اسم الكولوم في الداتابيز
                     'user'    => [
+                        'id'=>$comment->user->id,
                         'first_name' => $comment->user->first_name,
                         'last_name'  => $comment->user->last_name,
                         'img'        => $comment->user->img ? url('/img/profile/' . $comment->user->img) : null,
@@ -51,6 +53,7 @@ class AllBlogsResource extends JsonResource
                 return [
                     'is_like' => (bool) $reaction->is_like, // هيرجع true لو لايك و false لو عكس كدة
                     'user'    => [
+                        'id' => $reaction->user->id,
                         'first_name' => $reaction->user->first_name,
                         'last_name'  => $reaction->user->last_name,
                         'img'        => $reaction->user->img ? url('/img/profile/' . $reaction->user->img) : null,

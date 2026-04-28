@@ -18,6 +18,13 @@ class AuthenticatedSessionController extends Controller
     {
         /* get user */
         $user = User::where('email', $request->email)->first();
+        if(!$user){
+            return $this->errorResponse(
+                ['email' => 'The provided credentials are incorrect.'],
+                'The provided credentials are incorrect.',
+                401
+            );
+        }
         /* check password */
         if (Hash::check($request->password, $user->password)) {
             /* create token */

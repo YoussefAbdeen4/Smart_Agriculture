@@ -18,6 +18,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::post('profile/update', [ProfileController::class, 'update']);
     Route::delete('profile/delete', [ProfileController::class, 'destroy']);
     Route::get('profile/farms', [ProfileController::class, 'myFarms']);
+    Route::get('profile/{id}', [ProfileController::class, 'showPublicProfile']);
 
     // Farm Management
     Route::get('farms', [FarmController::class, 'index']);
