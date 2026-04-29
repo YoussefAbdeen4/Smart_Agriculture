@@ -34,7 +34,7 @@ class FarmController extends Controller
             FarmResource::collection($farms),
             'Farms retrieved successfully'
         );
-    }
+     }
 
     /**
      * Store a newly created farm in storage.

@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 // Protected routes (require authentication)
-Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+Route::middleware(['auth:sanctum', 'isVerified'])->group(function () {
     // Profile Management
     Route::get('profile', [ProfileController::class, 'show']);
     Route::post('profile/update', [ProfileController::class, 'update']);

@@ -37,8 +37,8 @@ Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
     ->middleware('auth:sanctum')
     ->name('logout');
 
-Route::prefix('google')->group(function () {
-    Route::get('/redirect', [GoogleAuthController::class, 'redirect']);
-    Route::get('/callback', [GoogleAuthController::class, 'callback']);
-    Route::middleware('auth:sanctum')->post('/complete-registration', [GoogleAuthController::class, 'completeRegistration']);
-});
+// Route::prefix('google')->group(function () {
+//     Route::get('/redirect', [GoogleAuthController::class, 'redirect']);
+//     Route::get('/callback', [GoogleAuthController::class, 'callback']);
+//     Route::middleware('auth:sanctum')->post('/complete-registration', [GoogleAuthController::class, 'completeRegistration']);
+// });
