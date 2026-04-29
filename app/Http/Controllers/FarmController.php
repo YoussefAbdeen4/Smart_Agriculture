@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\FarmResource;
+use App\Http\Resources\ShowFarmResource;
 use App\Http\Traits\ApiTrait;
 use App\Http\Traits\media;
 use App\Models\Farm;
@@ -84,9 +85,9 @@ class FarmController extends Controller
         $farm->load(['plants' => function ($query) {
             $query->with('plans');
         }, 'plans', 'users']);
-
+        $farm->load(['plants.plans', 'plans', 'users']);
         return $this->dataResponse(
-            compact('farm'),
+            new ShowFarmResource($farm),
             'Farm retrieved successfully'
         );
     }

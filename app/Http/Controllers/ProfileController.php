@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\ProfileResource;
 use App\Http\Resources\PublicProfileResource;
+use App\Http\Resources\ShowProfileResource;
 use App\Http\Traits\ApiTrait;
 use App\Http\Traits\media;
 use App\Models\Farm;
@@ -26,7 +27,7 @@ class ProfileController extends Controller
         $user->load(['supervisor', 'staff', 'farms']);
 
         return $this->dataResponse(
-            ['user' => $user],
+          new ShowProfileResource($user),
             'Profile retrieved successfully'
         );
     }
